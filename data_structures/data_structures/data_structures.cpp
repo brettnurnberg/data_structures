@@ -29,6 +29,30 @@ void sll_append(sll_node** head, int new_data);
 void sll_delete_key(sll_node** head, int key);
 
 
+/*--------------------------------------
+Stack using singly linked list
+--------------------------------------*/
+
+/* stack node */
+typedef struct stack_node
+{
+	int data;
+	stack_node* prev;
+
+} stack_node;
+
+/* print all node data in a stack */
+void stack_print(stack_node* n);
+
+void push(stack_node** head, int data);
+
+void pop(stack_node** head);
+
+int top(stack_node** head);
+
+bool is_empty(stack_node** head);
+
+
 
 
 
@@ -38,16 +62,20 @@ Main
 
 int main()
 {
-	sll_node* head = NULL;
+	stack_node* stack = NULL;
 
-	sll_append(&head, 1);
-	sll_append(&head, 2);
-	sll_append(&head, 3);
-	sll_append(&head, 4);
+	printf("%d\n", is_empty(&stack));
 
-	sll_delete_key(&head, 1);
+	push(&stack, 3);
+	push(&stack, 4);
+	push(&stack, 5);
+	pop(&stack);
+	push(&stack, 6);
 
-	sll_print(head);
+	if (!is_empty(&stack))
+	{
+		printf("%d\n", top(&stack));
+	}
 
 	getchar();
 
@@ -173,4 +201,70 @@ void sll_delete_key(sll_node** head, int key)
 		}
 	}
 
+}
+
+
+
+/*--------------------------------------
+Stack using singly linked list
+--------------------------------------*/
+
+/* print all node data in a stack */
+void stack_print(stack_node* n)
+{
+	while (n != NULL)
+	{
+		printf("%d\n", n->data);
+		n = n->prev;
+	}
+}
+
+void push(stack_node** head, int data)
+{
+	stack_node* new_node;
+
+	new_node = (stack_node*)malloc(sizeof(stack_node));
+
+	new_node->data = data;
+
+	new_node->prev = (*head);
+
+	*head = new_node;
+
+}
+
+void pop(stack_node** head)
+{
+	if (*head)
+	{
+		stack_node* temp;
+		temp = *head;
+
+		(*head) = (*head)->prev;
+		free(temp);
+	}
+}
+
+int top(stack_node** head)
+{
+	if (*head)
+	{
+		return (*head)->data;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+bool is_empty(stack_node** head)
+{
+	if (*head)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
