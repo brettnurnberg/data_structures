@@ -53,6 +53,26 @@ int top(stack_node** head);
 bool is_empty(stack_node** head);
 
 
+/*--------------------------------------
+Binary Search Tree
+--------------------------------------*/
+
+typedef struct bst_node
+{
+	int data;
+	bst_node* left;
+	bst_node* right;
+
+} bst_node;
+
+void insert_leaf(bst_node** root, int new_data);
+
+bst_node* search_tree(bst_node* root, int data);
+
+void print_tree(bst_node* root);
+
+
+
 
 
 
@@ -62,19 +82,28 @@ Main
 
 int main()
 {
-	stack_node* stack = NULL;
+	bst_node* root = NULL;
+	bst_node* result;
 
-	printf("%d\n", is_empty(&stack));
+	insert_leaf(&root, 10);
+	insert_leaf(&root, 8);
+	insert_leaf(&root, 7);
+	insert_leaf(&root, 9);
+	insert_leaf(&root, 12);
+	insert_leaf(&root, 11);
+	insert_leaf(&root, 13);
 
-	push(&stack, 3);
-	push(&stack, 4);
-	push(&stack, 5);
-	pop(&stack);
-	push(&stack, 6);
+	print_tree(root);
 
-	if (!is_empty(&stack))
+	result = search_tree(root, 7);
+
+	if (result)
 	{
-		printf("%d\n", top(&stack));
+		printf("Data %d found.\n", result->data);
+	}
+	else
+	{
+		printf("Data not found.");
 	}
 
 	getchar();
@@ -267,4 +296,66 @@ bool is_empty(stack_node** head)
 	{
 		return true;
 	}
+}
+
+
+/*--------------------------------------
+Binary Search Tree
+--------------------------------------*/
+
+void insert_leaf(bst_node** root, int new_data)
+{
+	if (*root)
+	{
+		if (new_data < (*root)->data)
+		{
+			insert_leaf(&(*root)->left, new_data);
+		}
+		else
+		{
+			insert_leaf(&(*root)->right, new_data);
+		}
+	}
+	else
+	{
+		bst_node* new_node = (bst_node*)malloc(sizeof(bst_node));
+
+		new_node->data = new_data;
+		new_node->left = NULL;
+		new_node->right = NULL;
+
+		(*root) = new_node;
+	}
+	return;
+}
+
+bst_node* search_tree(bst_node* root, int data)
+{
+	bst_node* tmp = root;
+
+	if (root)
+	{
+		if (data < root->data)
+		{
+			tmp = search_tree(root->left, data);
+		}
+		else if (data > root->data)
+		{
+			tmp = search_tree(root->right, data);
+		}
+	}
+	
+	return tmp;
+}
+
+void print_tree(bst_node* root)
+{
+	if (root)
+	{
+		print_tree(root->left);
+		printf("%d\n", root->data);
+		print_tree(root->right);
+	}
+
+	return;
 }
